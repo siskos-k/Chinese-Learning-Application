@@ -37,10 +37,66 @@ const CreateScreen = ({ navigation }) => {
                 value={question}
                 onChangeText={setQuestion}
             />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your correct answer"
+                value={correctAnswer}
+                onChangeText={setCorrectAnswer}
+            />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your incorrect answer"
+                value={wrongAnswer1}
+                onChangeText={setWrongAnswer1}
+            />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter incorrect answer"
+                value={wrongAnswer2}
+                onChangeText={setWrongAnswer2}
+            />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter incorrect answer"
+                value={wrongAnswer3}
+                onChangeText={setWrongAnswer3}
+            />
             {/* ... Similar TextInputs for the answers */}
             <Button title="Save Test" onPress={saveTest} />
         </View>
     );
 };
-
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#F5FCFF', // Light blue background
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    question: {
+      fontSize: 24,
+      textAlign: 'center', 
+      marginBottom: 30,
+    },
+    optionsContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      width: '100%',
+    },
+    option: {
+      backgroundColor: '#eee', // Light grey
+      padding: 20,
+      margin: 10,
+      borderRadius: 10,
+      width: '45%',
+      alignItems: 'center', 
+    },
+    optionText: {
+      fontSize: 18,
+    },
+    selected: { // Indicate selected option, you can modify this
+      backgroundColor: 'lightblue',
+    },
+  });
 export default CreateScreen;
