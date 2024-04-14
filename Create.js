@@ -8,95 +8,117 @@ const CreateScreen = ({ navigation }) => {
     const [wrongAnswer1, setWrongAnswer1] = useState('');
     const [wrongAnswer2, setWrongAnswer2] = useState('');
     const [wrongAnswer3, setWrongAnswer3] = useState('');
+    const [testTitle, setTestTitle] = useState('');
 
     // Function to save test to local storage
-    const saveTest = async () => { 
+    const saveTest = async () => {
         try {
             const newTest = {
-              question,
-              answers: [correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3],
-              // You can add a timestamp or a unique ID if needed
+                title: testTitle,
+                question,
+                correctAnswer, // Destructure the state
+                answers: [correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3],
             };
-      
+
             // Get existing tests (if any)
             const existingTests = await AsyncStorage.getItem('tests') || '[]';
             const updatedTests = JSON.stringify([...JSON.parse(existingTests), newTest]);
-      
+
             await AsyncStorage.setItem('tests', updatedTests);
             console.log('Test saved successfully!');
-          } catch (error) {
+        } catch (error) {
             console.error('Error saving test:', error);
-          }
+        }
+    };
+
+    const deleteAllTests = async () => {
+        try {
+            await AsyncStorage.removeItem('tests');
+            console.log('All tests deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting tests:', error);
+        }
     };
 
     return (
         <View style={styles.container}>
+            <Text style={styles.label}>Test Title:</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Enter your question"
+                value={testTitle}
+                onChangeText={setTestTitle}
+            />
+
+            <Text style={styles.label}>Question:</Text>
+            <TextInput
+                style={styles.input}
                 value={question}
                 onChangeText={setQuestion}
             />
-              <TextInput
+
+            <Text style={styles.label}>Correct Answer:</Text>
+            <TextInput
                 style={styles.input}
-                placeholder="Enter your correct answer"
                 value={correctAnswer}
                 onChangeText={setCorrectAnswer}
             />
-              <TextInput
+               <Text style={styles.label}>Wrong Answer 1:</Text>
+            <TextInput
                 style={styles.input}
-                placeholder="Enter your incorrect answer"
                 value={wrongAnswer1}
                 onChangeText={setWrongAnswer1}
-            />
-              <TextInput
+            /> <Text style={styles.label}>Wrong Answer 2:</Text>
+            <TextInput
                 style={styles.input}
-                placeholder="Enter incorrect answer"
                 value={wrongAnswer2}
                 onChangeText={setWrongAnswer2}
-            />
-              <TextInput
+            /> <Text style={styles.label}>Wrong Answer 3:</Text>
+         <TextInput
                 style={styles.input}
-                placeholder="Enter incorrect answer"
                 value={wrongAnswer3}
                 onChangeText={setWrongAnswer3}
+            /> 
+
+            {/* Similar structure for incorrect answers */}
+
+            <Button
+                title="Save Test"
+                onPress={saveTest}
+                color="#2196F3"
+                style={styles.button}
             />
-            {/* ... Similar TextInputs for the answers */}
-            <Button title="Save Test" onPress={saveTest} />
+            <Button
+                title="Delete All Tests"
+                onPress={deleteAllTests}
+                color="red"
+                style={styles.button}
+            />
         </View>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#F5FCFF', // Light blue background
-      alignItems: 'center',
-      justifyContent: 'center'
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 20,
     },
-    question: {
-      fontSize: 24,
-      textAlign: 'center', 
-      marginBottom: 30,
+    label: {
+        fontSize: 16,
+        marginBottom: 5,
+        marginTop: 15,
     },
-    optionsContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      width: '100%',
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 10,
     },
-    option: {
-      backgroundColor: '#eee', // Light grey
-      padding: 20,
-      margin: 10,
-      borderRadius: 10,
-      width: '45%',
-      alignItems: 'center', 
+    button: {
+        padding: 10,
+        margin: 10,
     },
-    optionText: {
-      fontSize: 18,
-    },
-    selected: { // Indicate selected option, you can modify this
-      backgroundColor: 'lightblue',
-    },
-  });
+});
+
 export default CreateScreen;

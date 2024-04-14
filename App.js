@@ -6,6 +6,7 @@ import SelectScreen from './Select';
 import CreateScreen from './Create';
 import { useNavigation } from '@react-navigation/native';
 import Test1Screen from './Test1';
+import TestDetailsScreen from './TestDetailsScreen';
 const Stack = createNativeStackNavigator();
 
 
@@ -33,6 +34,8 @@ export default function App() {
         <Stack.Screen name="Select" component={SelectScreen} />
         <Stack.Screen name="Create" component={CreateScreen} />
         <Stack.Screen name="Test1" component={Test1Screen} /> 
+        <Stack.Screen name="TestDetails" component={TestDetailsScreen} /> 
+
 
      
       </Stack.Navigator>
