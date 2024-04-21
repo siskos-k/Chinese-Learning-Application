@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MaterialIcons } from '@expo/vector-icons'; // Import for the X icon
 
 const TestDetailsScreen = ({ route }) => {
   const { test } = route.params;
   const [selected, setSelected] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [popupColor, setPopupColor] = useState('lightgray'); // Default color
 
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  }
+  
   const checkAnswer = (answer) => {
     setSelected(answer);
 
     if (answer === test.correctAnswer) {
-      console.log('Correct Answer!');
-      // You could provide visual feedback as well e.g. changing the button color to green
+      setPopupMessage('Correct!');
+      setPopupColor('green');
     } else {
-      console.log(`Incorrect Answer. The correct answer is: ${test.correctAnswer}`);
-      // You could provide visual feedback as well e.g. changing the button color to red and the correct answer to green
+      setPopupMessage(`Incorrect. The correct answer is: ${test.correctAnswer}`);
+      setPopupColor('red');
     }
+
+    setShowPopup(true); // Show popup for both correct and incorrect
   };
 
   return (
@@ -32,6 +42,16 @@ const TestDetailsScreen = ({ route }) => {
           </TouchableHighlight>
         ))}
       </View>
+      {showPopup && (
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity onPress={handleClosePopup} style={styles.closeButton}>
+            <MaterialIcons name="close" size={24} color="black" />
+          </TouchableOpacity>
+          <View style={[styles.popup, { backgroundColor: popupColor }]}>
+            <Text style={styles.popupText}>{popupMessage}</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -67,6 +87,49 @@ const styles = StyleSheet.create({
   },
   selected: {
     backgroundColor: 'lightblue',
+  },
+  popup: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    position: 'absolute', // For the React Native modal
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: '-50%' }, {translateY: '-50%' }],
+  },
+  popupText: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 10
+  },
+  closeButton: {
+    color: 'blue',
+    textAlign: 'center'
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 100, 
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // Remove the background color
+  },
+  popup: {
+    padding: 20,
+    borderRadius: 10,
+    width: '80%', // Wider popup
+  },
+  popupText: {
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 5,
   },
 });
 
